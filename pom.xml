@@ -58,6 +58,11 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.5.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-restdocs</artifactId>
             <scope>test</scope>
