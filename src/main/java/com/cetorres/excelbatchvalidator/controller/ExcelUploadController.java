@@ -1,29 +1,27 @@
 package com.cetorres.excelbatchvalidator.controller;
 
-import com.cetorres.excelbatchvalidator.service.ExcelReader;
-import org.apache.poi.openxml4j.opc.ContentTypes;
-import org.apache.poi.openxml4j.opc.internal.ContentType;
+import com.cetorres.excelbatchvalidator.domain.Person;
+import com.cetorres.excelbatchvalidator.service.ExcelDataExtractor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
-import java.util.Objects;
+import java.util.List;
 
 @RestController
 @RequestMapping("file/")
 public class ExcelUploadController {
 
-    private final ExcelReader excelReader;
+    private final ExcelDataExtractor excelDataExtractor;
 
-    public ExcelUploadController(ExcelReader excelReader) {
-        this.excelReader = excelReader;
+    public ExcelUploadController(ExcelDataExtractor excelDataExtractor) {
+        this.excelDataExtractor = excelDataExtractor;
     }
 
     @PostMapping("upload")
-    public String uploadExcel(@RequestParam("file") MultipartFile file) {
-        return excelReader.read(file);
+    public List<Person> uploadExcel(@RequestParam("file") MultipartFile file) {
+        return excelDataExtractor.extractAndFormat(file);
     }
 
 }
