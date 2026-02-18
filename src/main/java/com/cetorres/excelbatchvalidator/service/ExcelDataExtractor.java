@@ -7,6 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.springframework.stereotype.Component;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
+import static com.cetorres.excelbatchvalidator.enums.DataColumn.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,14 +30,14 @@ public class ExcelDataExtractor {
 
             sheet.rowIterator().forEachRemaining(row ->
                     persons.add(Person.builder()
-                            .dni(dataFormatter.formatCellValue(row.getCell(1)))
-                            .firstName(row.getCell(2).getStringCellValue())
-                            .secondName(row.getCell(3).getStringCellValue())
-                            .firstLastname(row.getCell(4).getStringCellValue())
-                            .secondLastname(row.getCell(5).getStringCellValue())
-                            .gender(row.getCell(6).getStringCellValue().charAt(0))
-                            .email(row.getCell(7).getStringCellValue())
-                            .phoneNumber(dataFormatter.formatCellValue(row.getCell(8)))
+                            .dni(dataFormatter.formatCellValue(row.getCell(DNI.getIndex())))
+                            .firstName(row.getCell(FIRST_NAME.getIndex()).getStringCellValue())
+                            .secondName(row.getCell(SECOND_NAME.getIndex()).getStringCellValue())
+                            .firstLastname(row.getCell(FIRST_LASTNAME.getIndex()).getStringCellValue())
+                            .secondLastname(row.getCell(SECOND_LASTNAME.getIndex()).getStringCellValue())
+                            .gender(row.getCell(GENDER.getIndex()).getStringCellValue().charAt(0))
+                            .email(row.getCell(EMAIL.getIndex()).getStringCellValue())
+                            .phoneNumber(dataFormatter.formatCellValue(row.getCell(PHONE_NUMBER.getIndex())))
                             .build())
             );
 
