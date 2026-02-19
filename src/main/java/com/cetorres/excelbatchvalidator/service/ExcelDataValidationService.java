@@ -3,12 +3,12 @@ package com.cetorres.excelbatchvalidator.service;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ExcelDataOrchestrator {
+public class ExcelDataValidationOrchestrator {
     private final ExcelDataExtractor excelDataExtractor;
     private final ExcelDataParser excelDataParser;
     private final ExcelDataValidator excelDataValidator;
 
-    public ExcelDataOrchestrator(
+    public ExcelDataValidationOrchestrator(
             ExcelDataExtractor excelDataExtractor,
             ExcelDataParser excelDataParser,
             ExcelDataValidator excelDataValidator) {
@@ -18,6 +18,6 @@ public class ExcelDataOrchestrator {
     }
 
     // TODO: apply all the logic below, and call this in controller method.
-    public void parseDataAndValidate() {
+    public void process() {
     }
 }
