@@ -12,6 +12,8 @@ public class DniValidator implements Validator {
     public boolean isValid(ValidationItem validationItem) {
         if (validationItem == null) return false;
 
+        var value = validationItem.getValue();
+
         value = value.replaceAll("[^0-9]", "");
 
         if (!value.matches("\\d{11}")) return false;
