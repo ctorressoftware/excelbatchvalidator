@@ -1,12 +1,12 @@
 package com.cetorres.excelbatchvalidator.service;
 
 import com.cetorres.excelbatchvalidator.domain.Person;
+import com.cetorres.excelbatchvalidator.domain.ValidationItem;
+import com.cetorres.excelbatchvalidator.enums.DataType;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 @Service
 public class ExcelDataValidationService {
@@ -15,28 +15,33 @@ public class ExcelDataValidationService {
     private final DataValidatorCore dataValidatorCore;
 
     public ExcelDataValidationService(
+            DataValidatorCore dataValidatorCore,
             ExcelDataExtractor excelDataExtractor,
             ExcelDataParser excelDataParser) {
+        this.dataValidatorCore = dataValidatorCore;
         this.excelDataExtractor = excelDataExtractor;
         this.excelDataParser = excelDataParser;
     }
 
+    @Async
     public List<Person> process(MultipartFile file) {
         var raw = excelDataExtractor.extract(file);
         List<Person> persons = excelDataParser.transform(raw);
 
-        var validatorWorkers = persons.stream()
-                .map(DataValidatorCore::new)
+        var validationsItems = persons.stream()
+                .map(person -> List.of(
+                        new ValidationItem(DataType.DNI, person.getDni()),
+                        new ValidationItem(DataType.DNI, person.getFirstName()),
+                        new ValidationItem(DataType.DNI, person.getSecondName()),
+                        new ValidationItem(DataType.DNI, person.getFirstLastname()),
+                        new ValidationItem(DataType.DNI, person.getSecondLastname()),
+                        new ValidationItem(DataType.DNI, String.valueOf(person.getGender())),
+                        new ValidationItem(DataType.DNI, person.getEmail()),
+                        new ValidationItem(DataType.DNI, person.getPhoneNumber()))
+                )
                 .toList();
 
-        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-
-            List<Future<String>> futures = validatorWorkers.stream()
-                    .map(executor::submit)
-                    .toList();
-
-            futures.forEach(Future::get);
-        }
+        dataValidatorCore.validate(validationsItems);
 
         return persons;
     }

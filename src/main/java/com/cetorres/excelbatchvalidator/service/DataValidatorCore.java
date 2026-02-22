@@ -1,36 +1,59 @@
 package com.cetorres.excelbatchvalidator.service;
 
-import com.cetorres.excelbatchvalidator.domain.Person;
 import com.cetorres.excelbatchvalidator.domain.ValidationItem;
-import com.cetorres.excelbatchvalidator.service.validators.DniValidator;
+import com.cetorres.excelbatchvalidator.domain.ValidationResume;
 import com.cetorres.excelbatchvalidator.service.validators.Validator;
+import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.Callable;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-public class DataValidatorCore implements Callable<String> {
+@Component
+public class DataValidatorCore {
+    private final Map<String, Validator> validators;
 
-    private final ValidationItem validationItem;
-    private final List<Validator> validators;
-
-    public DataValidatorCore(ValidationItem validationItem, List<Validator> validators) {
-        this.validationItem = validationItem;
+    public DataValidatorCore(Map<String, Validator> validators) {
         this.validators = validators;
     }
 
-    public void validate(ValidationItem validationItem) {
+    public void validate(List<List<ValidationItem>> batchToValidate) {
 
-        /*Validator validator =
+        var workers = batchToValidate.stream()
+                .flatMap(Collection::stream)
+                .map(rowToValidate -> {
 
-        if (!DniValidator.isValid(person.getDni())) {
-            System.out.println("Error");
-        }*/
+                    final String type = rowToValidate.getType().getName().toLowerCase();
 
-    }
+                    if (!validators.containsKey(type))
+                        throw new RuntimeException("Cannot find a valid validator for specific type: " + type);
 
-    @Override
-    public String call() throws Exception {
-        //validate();
-        return "";
+                    var validator = validators.get(type);
+
+                    return new ValidatorWorker(rowToValidate, validator);
+                })
+                .toList();
+
+        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+
+            List<Future<ValidationResume>> futureResume = workers.stream()
+                    .map(executor::submit)
+                    .toList();
+
+            var resume = futureResume.stream().map(future -> {
+                try {
+                    return future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    throw new RuntimeException(e);
+                }
+            }).toList();
+
+            for (int i = 0; i < resume.size(); i++) {
+                System.out.println((i+1) + " " + resume.get(i).getError());
+            }
+        }
     }
 }

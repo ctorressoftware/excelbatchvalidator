@@ -19,7 +19,6 @@ public class ExcelUploadController {
         this.excelDataValidationService = excelDataValidationService;
     }
 
-    // TODO: apply validators map injection and identify specific validator with @qualifer
     @PostMapping("upload")
     public List<Person> uploadExcel(@RequestParam("file") MultipartFile file) {
         return excelDataValidationService.process(file);
