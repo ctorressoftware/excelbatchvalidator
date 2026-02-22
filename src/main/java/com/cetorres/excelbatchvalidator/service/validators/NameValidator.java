@@ -2,7 +2,11 @@ package com.cetorres.excelbatchvalidator.service.validators;
 
 import org.springframework.stereotype.Component;
 
-@Component
-public class NameValidator {
+@Component("name")
+public class NameValidator implements Validator {
 
+    @Override
+    public boolean isValid(String value) {
+        return true;
+    }
 }
