@@ -19,8 +19,8 @@ public class ValidatorWorker implements Callable<ValidationResume> {
 
         var result = validator.isValid(toValidate.getValue());
 
-        return new ValidationResume("The value "
-                + toValidate.getValue() + " is " + (result ? "valid" : "invalid"));
+        // TODO: maybe I gonna delete this file
+        return new ValidationResume(null);
     }
 
     @Override

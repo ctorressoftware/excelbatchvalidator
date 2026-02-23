@@ -1,13 +1,15 @@
 package com.cetorres.excelbatchvalidator.domain;
 
-public class ValidationResume {
-    private final String error;
+import java.util.List;
 
-    public ValidationResume(String error) {
-        this.error = error;
+public class ValidationResume {
+    private final List<String> errors;
+
+    public ValidationResume(List<String> errors) {
+        this.errors = errors;
     }
 
-    public String getError() {
-        return error;
+    public List<String> getErrors() {
+        return errors;
     }
 }

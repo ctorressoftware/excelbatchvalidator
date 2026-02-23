@@ -52,7 +52,8 @@ public class DataValidatorCore {
             }).toList();
 
             for (int i = 0; i < resume.size(); i++) {
-                System.out.println((i+1) + " " + resume.get(i).getError());
+                // TODO: Change print logic
+                //System.out.println((i+1) + " " + resume.get(i).getError());
             }
         }
     }
