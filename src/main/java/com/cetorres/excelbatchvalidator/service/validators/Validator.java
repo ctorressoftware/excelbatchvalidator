@@ -1,5 +1,7 @@
 package com.cetorres.excelbatchvalidator.service.validators;
 
+import com.cetorres.excelbatchvalidator.domain.ValidationResult;
+
 public interface Validator {
-    boolean isValid(String value);
+    ValidationResult isValid(String value);
 }
