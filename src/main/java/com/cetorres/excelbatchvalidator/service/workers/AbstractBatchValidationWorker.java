@@ -1,8 +1,9 @@
-package com.cetorres.excelbatchvalidator.service.validators;
+package com.cetorres.excelbatchvalidator.service.workers;
 
 import com.cetorres.excelbatchvalidator.domain.ValidationItem;
 import com.cetorres.excelbatchvalidator.domain.ValidationResult;
 import com.cetorres.excelbatchvalidator.domain.ValidationResume;
+import com.cetorres.excelbatchvalidator.service.validators.Validator;
 
 import java.util.ArrayList;
 import java.util.List;

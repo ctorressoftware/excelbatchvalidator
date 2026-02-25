@@ -1,4 +1,4 @@
-package com.cetorres.excelbatchvalidator.service.validators;
+package com.cetorres.excelbatchvalidator.service.workers;
 
 import com.cetorres.excelbatchvalidator.domain.ValidationResume;
 

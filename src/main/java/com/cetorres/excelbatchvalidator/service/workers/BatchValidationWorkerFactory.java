@@ -1,6 +1,7 @@
-package com.cetorres.excelbatchvalidator.service.validators;
+package com.cetorres.excelbatchvalidator.service.workers;
 
 import com.cetorres.excelbatchvalidator.domain.ValidationItem;
+import com.cetorres.excelbatchvalidator.service.validators.Validator;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
