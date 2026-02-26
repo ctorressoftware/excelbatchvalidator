@@ -33,7 +33,7 @@ public class DniValidator implements Validator {
         int realCheckDigit = Character.getNumericValue(cleanValue.charAt(10));
 
         if (calculatedCheckDigit == realCheckDigit) {
-            return new ValidationResult("DNI " + value + ": OK", true);
+            return new ValidationResult(null, true);
         } else {
             return new ValidationResult("Invalid DNI: " + value, false);
         }
