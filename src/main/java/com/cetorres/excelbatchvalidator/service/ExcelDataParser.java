@@ -33,13 +33,13 @@ public class ExcelDataParser {
         return persons.stream()
                 .map(person -> List.of(
                         new ValidationItem(DataType.DNI, person.getDni()),
-                        new ValidationItem(DataType.DNI, person.getFirstName()),
-                        new ValidationItem(DataType.DNI, person.getSecondName()),
-                        new ValidationItem(DataType.DNI, person.getFirstLastname()),
-                        new ValidationItem(DataType.DNI, person.getSecondLastname()),
-                        new ValidationItem(DataType.DNI, String.valueOf(person.getGender())),
-                        new ValidationItem(DataType.DNI, person.getEmail()),
-                        new ValidationItem(DataType.DNI, person.getPhoneNumber())))
+                        new ValidationItem(DataType.NAME, person.getFirstName()),
+                        new ValidationItem(DataType.NAME, person.getSecondName()),
+                        new ValidationItem(DataType.LASTNAME, person.getFirstLastname()),
+                        new ValidationItem(DataType.LASTNAME, person.getSecondLastname()),
+                        new ValidationItem(DataType.GENDER, String.valueOf(person.getGender())),
+                        new ValidationItem(DataType.EMAIL, person.getEmail()),
+                        new ValidationItem(DataType.PHONE_NUMBER, person.getPhoneNumber())))
                 .toList();
     }
 }
