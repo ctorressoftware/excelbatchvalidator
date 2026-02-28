@@ -2,6 +2,7 @@ package com.cetorres.excelbatchvalidator.service;
 
 import com.cetorres.excelbatchvalidator.domain.ValidationItem;
 import com.cetorres.excelbatchvalidator.domain.ValidationResume;
+import com.cetorres.excelbatchvalidator.domain.ValidationStats;
 import com.cetorres.excelbatchvalidator.service.workers.BatchValidationWorker;
 import com.cetorres.excelbatchvalidator.service.workers.BatchValidationWorkerFactory;
 import org.springframework.stereotype.Component;
@@ -21,8 +22,10 @@ public class DataValidatorCore {
 
     public List<ValidationResume> validate(List<List<ValidationItem>> toValidate) {
 
+        var validationStats = new ValidationStats();
+
         List<BatchValidationWorker> workers = toValidate.stream()
-                .map(batchValidationWorkerFactory::create)
+                .map(items -> batchValidationWorkerFactory.create(items, validationStats))
                 .toList();
 
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {

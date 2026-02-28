@@ -1,6 +1,7 @@
 package com.cetorres.excelbatchvalidator.service.workers;
 
 import com.cetorres.excelbatchvalidator.domain.ValidationItem;
+import com.cetorres.excelbatchvalidator.domain.ValidationStats;
 import com.cetorres.excelbatchvalidator.service.validators.Validator;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ public class BatchValidationWorkerFactory {
         this.validators = validators;
     }
 
-    public BatchValidationWorker create(List<ValidationItem> items) {
-        return new BatchValidationWorker(items, validators);
+    public BatchValidationWorker create(List<ValidationItem> items, ValidationStats validationStats) {
+        return new BatchValidationWorker(items, validators, validationStats);
     }
 }
