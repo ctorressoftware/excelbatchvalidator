@@ -3,29 +3,26 @@ package com.cetorres.excelbatchvalidator.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
 
-// TODO: create stats and metrics. Each worker has to write and sign this object
 public class ValidationStats {
-    private volatile AtomicBoolean claimed;
-    private volatile AtomicLong rowsCount;
-    private final List<String> signatures = Collections.synchronizedList(new ArrayList<>());
+    private boolean claimed = false;
+    private long processedRows = 0;
+    private final List<String> signatures = new ArrayList<>();
 
-    public void setClaimed(boolean expectedValue, boolean newValue) {
-        this.claimed.compareAndSet(expectedValue, newValue);
+    public void setClaimed(boolean claimed) {
+        this.claimed = claimed;
     }
 
-    public boolean getClaimed() {
-        return claimed.get();
+    public boolean isClaimed() {
+        return claimed;
     }
 
-    public void setRowsCount(long expectedValue, long newValue) {
-        this.rowsCount.compareAndSet(expectedValue, newValue);
+    public void setProcessedRows(long processedRows) {
+        this.processedRows = processedRows;
     }
 
-    public long getRowsCount() {
-        return rowsCount.get();
+    public long getProcessedRows() {
+        return processedRows;
     }
 
     public void addSignature(String signature) {
