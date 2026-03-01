@@ -31,11 +31,11 @@ public class DataValidatorCore {
 
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
-            List<Future<ValidationResume>> future = workers.stream()
+            List<Future<ValidationResume>> futures = workers.stream()
                     .map(executor::submit)
                     .toList();
 
-            List<ValidationResume> resume = future.stream()
+            List<ValidationResume> resume = futures.stream()
                     .map(ValidationResumeHelper::get)
                     .toList();
 
