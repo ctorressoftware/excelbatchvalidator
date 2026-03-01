@@ -3,7 +3,6 @@ package com.cetorres.excelbatchvalidator.service;
 import com.cetorres.excelbatchvalidator.domain.Person;
 import com.cetorres.excelbatchvalidator.domain.ValidationItem;
 import com.cetorres.excelbatchvalidator.domain.ValidationReport;
-import com.cetorres.excelbatchvalidator.domain.ValidationResume;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
