@@ -1,6 +1,7 @@
 package com.cetorres.excelbatchvalidator.service;
 
 import com.cetorres.excelbatchvalidator.domain.ValidationItem;
+import com.cetorres.excelbatchvalidator.domain.ValidationReport;
 import com.cetorres.excelbatchvalidator.domain.ValidationResume;
 import com.cetorres.excelbatchvalidator.domain.ValidationStats;
 import com.cetorres.excelbatchvalidator.service.workers.BatchValidationWorker;
@@ -20,7 +21,7 @@ public class DataValidatorCore {
         this.batchValidationWorkerFactory = batchValidationWorkerFactory;
     }
 
-    public List<ValidationResume> validate(List<List<ValidationItem>> toValidate) {
+    public ValidationReport validate(List<List<ValidationItem>> toValidate) {
 
         var validationStats = new ValidationStats();
 
@@ -30,17 +31,19 @@ public class DataValidatorCore {
 
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
-            List<Future<ValidationResume>> futureResume = workers.stream()
+            List<Future<ValidationResume>> future = workers.stream()
                     .map(executor::submit)
                     .toList();
 
-            return futureResume.stream().map(future -> {
+            List<ValidationResume> resume = future.stream().map(resumeFuture -> {
                 try {
-                    return future.get();
+                    return resumeFuture.get();
                 } catch (InterruptedException | ExecutionException e) {
                     throw new RuntimeException(e);
                 }
             }).toList();
+
+            return ValidationReport.of(validationStats, resume);
         }
     }
 }
