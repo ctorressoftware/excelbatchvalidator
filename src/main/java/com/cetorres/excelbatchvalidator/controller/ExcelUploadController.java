@@ -1,7 +1,10 @@
 package com.cetorres.excelbatchvalidator.controller;
 
 import com.cetorres.excelbatchvalidator.domain.ValidationReport;
+import static com.cetorres.excelbatchvalidator.dto.Result.*;
+import com.cetorres.excelbatchvalidator.dto.Result;
 import com.cetorres.excelbatchvalidator.service.ExcelDataValidationService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,8 +22,8 @@ public class ExcelUploadController {
     }
 
     @PostMapping("upload")
-    public ValidationReport uploadExcel(@RequestParam("file") MultipartFile file) {
-        return excelDataValidationService.process(file);
+    public ResponseEntity<Result<ValidationReport>> uploadExcel(@RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(success(excelDataValidationService.process(file)));
     }
 
 }
