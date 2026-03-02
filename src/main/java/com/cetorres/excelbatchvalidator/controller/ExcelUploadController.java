@@ -21,6 +21,7 @@ public class ExcelUploadController {
         this.excelDataValidationService = excelDataValidationService;
     }
 
+    // TODO: Refactor to @Async + CompletableFuture to align with Spring async model and remove manual thread management.
     @PostMapping("upload")
     public ResponseEntity<Result<ValidationReport>> uploadExcel(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(success(excelDataValidationService.process(file)));

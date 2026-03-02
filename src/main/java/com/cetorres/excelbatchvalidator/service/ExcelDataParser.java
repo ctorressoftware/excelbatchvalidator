@@ -28,7 +28,6 @@ public class ExcelDataParser {
                 .toList();
     }
 
-    // TODO: Change the datatype mapping and create a specific validator for each case
     public List<List<ValidationItem>> buildValidationItems(List<Person> persons) {
         return persons.stream()
                 .map(person -> List.of(
