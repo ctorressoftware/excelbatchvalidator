@@ -42,6 +42,7 @@ public class DataValidatorCore {
 
             return ValidationReport.of(stats, resume);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             throw new RuntimeException(e);
         }
     }
