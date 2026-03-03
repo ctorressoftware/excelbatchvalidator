@@ -10,10 +10,10 @@ import com.cetorres.excelbatchvalidator.service.workers.BatchValidationWorkerFac
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 @Component
 public class DataValidatorCore {
@@ -27,23 +27,22 @@ public class DataValidatorCore {
     public ValidationReport validate(List<List<ValidationItem>> toValidate) {
 
         var stats = new ValidationStats();
-
         List<BatchValidationWorker> workers = toValidate.stream()
                 .map(items -> factory.create(items, stats))
                 .toList();
 
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+            var completionService = new ExecutorCompletionService<ValidationResume>(executor);
+            for (var worker : workers) completionService.submit(worker);
+            var resume = new ArrayList<ValidationResume>(workers.size());
 
-            List<Future<ValidationResume>> futures = executor.invokeAll(workers);
-
-            List<ValidationResume> resume = futures.stream()
-                    .map(ValidationResumeHelper::get)
-                    .toList();
+            for (int i = 0; i < workers.size(); i++)
+                resume.add(ValidationResumeHelper.get(completionService.take()));
 
             return ValidationReport.of(stats, resume);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException(e);
+            throw new RuntimeException("Interrupted while waiting for future", e);
         }
     }
 }
