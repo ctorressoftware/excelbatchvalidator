@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("file/")
+@RequestMapping("/file")
 public class ExcelUploadController {
 
     private final ExcelDataValidationService excelDataValidationService;
@@ -21,10 +21,16 @@ public class ExcelUploadController {
         this.excelDataValidationService = excelDataValidationService;
     }
 
-    // TODO: Refactor to @Async + CompletableFuture to align with Spring async model and remove manual thread management.
-    @PostMapping("upload")
+    @PostMapping("/validate")
     public ResponseEntity<Result<ValidationReport>> uploadExcel(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(success(excelDataValidationService.process(file)));
+    }
+
+    @PostMapping(value = "/validate/artifacts", produces = "application/zip")
+    public ResponseEntity<Result<byte[]>> generateExcels(@RequestParam("file") MultipartFile file) {
+        ValidationReport report = excelDataValidationService.process(file);
+        // TODO: byte[] zipBytes = artifactService.buildZipWithExcels(report);
+        return ResponseEntity.ok(success(null));
     }
 
 }
