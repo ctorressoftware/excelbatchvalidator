@@ -23,6 +23,8 @@ public class BatchValidationWorker extends AbstractBatchValidationWorker {
     public ValidationResume call() {
         validationStats.incrementProcessedRows();
         var result = super.validate();
+        long numberOfErrors = result.getErrors().size();
+        validationStats.addNumberOfErrors(numberOfErrors);
         validationStats.addSignature("Thread with ID="
                 + Thread.currentThread().threadId() + " did his job.");
         return result;

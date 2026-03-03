@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class ValidationStats {
     private final AtomicLong processedRows = new AtomicLong(0);
+    private final AtomicLong numberOfErrors = new AtomicLong(0);
     private final List<String> signatures = Collections.synchronizedList(new ArrayList<>());
 
     public long incrementProcessedRows() {
@@ -15,6 +16,14 @@ public class ValidationStats {
 
     public long getProcessedRows() {
         return processedRows.get();
+    }
+
+    public long addNumberOfErrors(long toAdd) {
+        return this.numberOfErrors.addAndGet(toAdd);
+    }
+
+    public long getNumberOfErrors() {
+        return numberOfErrors.get();
     }
 
     public void addSignature(String signature) {
