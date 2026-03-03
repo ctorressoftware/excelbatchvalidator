@@ -23,7 +23,6 @@ public class DataValidatorCore {
         this.factory = factory;
     }
 
-    @Async
     public ValidationReport validate(List<List<ValidationItem>> toValidate) {
 
         var stats = new ValidationStats();
