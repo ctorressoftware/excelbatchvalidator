@@ -7,9 +7,11 @@ import com.cetorres.excelbatchvalidator.domain.ValidationStats;
 import com.cetorres.excelbatchvalidator.helper.ValidationResumeHelper;
 import com.cetorres.excelbatchvalidator.service.workers.BatchValidationWorker;
 import com.cetorres.excelbatchvalidator.service.workers.BatchValidationWorkerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
@@ -21,6 +23,7 @@ public class DataValidatorCore {
         this.factory = factory;
     }
 
+    @Async
     public ValidationReport validate(List<List<ValidationItem>> toValidate) {
 
         var stats = new ValidationStats();
@@ -31,15 +34,15 @@ public class DataValidatorCore {
 
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
-            List<Future<ValidationResume>> futures = workers.stream()
-                    .map(executor::submit)
-                    .toList();
+            List<Future<ValidationResume>> futures = executor.invokeAll(workers);
 
             List<ValidationResume> resume = futures.stream()
                     .map(ValidationResumeHelper::get)
                     .toList();
 
             return ValidationReport.of(stats, resume);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }
