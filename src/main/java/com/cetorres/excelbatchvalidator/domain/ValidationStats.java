@@ -3,26 +3,18 @@ package com.cetorres.excelbatchvalidator.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class ValidationStats {
-    private boolean claimed = false;
-    private long processedRows = 0;
-    private final List<String> signatures = new ArrayList<>();
+    private final AtomicLong processedRows = new AtomicLong(0);
+    private final List<String> signatures = Collections.synchronizedList(new ArrayList<>());
 
-    public void setClaimed(boolean claimed) {
-        this.claimed = claimed;
-    }
-
-    public boolean isClaimed() {
-        return claimed;
-    }
-
-    public void setProcessedRows(long processedRows) {
-        this.processedRows = processedRows;
+    public long incrementProcessedRows() {
+        return processedRows.incrementAndGet();
     }
 
     public long getProcessedRows() {
-        return processedRows;
+        return processedRows.get();
     }
 
     public void addSignature(String signature) {
@@ -30,6 +22,8 @@ public class ValidationStats {
     }
 
     public List<String> getSignatures() {
-        return Collections.unmodifiableList(signatures);
+        synchronized (signatures) {
+            return List.copyOf(signatures);
+        }
     }
 }

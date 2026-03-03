@@ -21,8 +21,7 @@ public class BatchValidationWorker extends AbstractBatchValidationWorker {
 
     @Override
     public ValidationResume call() {
-        var processedRows = validationStats.getProcessedRows();
-        validationStats.setProcessedRows(processedRows + 1);
+        validationStats.incrementProcessedRows();
         var result = super.validate();
         validationStats.addSignature("Thread with ID="
                 + Thread.currentThread().threadId() + " did his job.");
