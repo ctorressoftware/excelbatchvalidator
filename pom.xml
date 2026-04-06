@@ -11,8 +11,8 @@
     <groupId>com.cetorres</groupId>
     <artifactId>excel-batch-validator</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>excelbatchvalidator</name>
-    <description>excelbatchvalidator</description>
+    <name>excel-batch-validator</name>
+    <description>A Spring Boot service that validates Excel data concurrently.</description>
     <url/>
     <licenses>
         <license/>

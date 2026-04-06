@@ -1,4 +1,4 @@
-# Excel Batch Validator
+# excel-batch-validator
 
 A Spring Boot service that validates Excel data concurrently using virtual threads, while aggregating results and maintaining structured validation output.
 
